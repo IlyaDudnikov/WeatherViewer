@@ -1,5 +1,6 @@
 plugins {
     id 'java'
+    id 'war'
 }
 
 group 'com.ilyadudnikov'
@@ -24,7 +25,21 @@ dependencies {
 
     testImplementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${junitVersion}")
-    
+
+    compileOnly 'org.projectlombok:lombok:1.18.30'
+
+    implementation 'org.springframework:spring-core:6.1.14'
+    implementation 'org.springframework:spring-context:6.1.14'
+    implementation 'org.springframework:spring-webmvc:6.1.14'
+    implementation 'org.springframework:spring-tx:6.1.14'
+
+    implementation 'org.thymeleaf:thymeleaf:3.1.2.RELEASE'
+    implementation 'org.thymeleaf:thymeleaf-spring6:3.1.2.RELEASE'
+
+    compileOnly 'jakarta.servlet:jakarta.servlet-api:6.0.0'
+
+
+
 }
 
 test {
