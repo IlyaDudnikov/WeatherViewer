@@ -38,6 +38,20 @@ dependencies {
 
     compileOnly 'jakarta.servlet:jakarta.servlet-api:6.0.0'
 
+    implementation 'org.springframework:spring-orm:6.1.14'
+    implementation 'org.hibernate.orm:hibernate-core:6.6.0.Final'
+
+    implementation 'ch.qos.logback:logback-classic:1.5.6'
+
+    implementation 'org.postgresql:postgresql:42.7.3'
+
+
+
+
+
+
+
+
 
 
 }

@@ -1,8 +1,11 @@
 package com.ilyadudnikov.weatherViewer.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.orm.hibernate5.HibernateTransactionManager;
+import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ViewResolverRegistry;
@@ -12,10 +15,10 @@ import org.thymeleaf.spring6.templateresolver.SpringResourceTemplateResolver;
 import org.thymeleaf.spring6.view.ThymeleafViewResolver;
 
 @Configuration
-@ComponentScan("com.ilyadudnikov.weatherViewer")
 @EnableWebMvc
+@ComponentScan("com.ilyadudnikov.weatherViewer")
 @EnableTransactionManagement
-public class SpringConfig implements WebMvcConfigurer {
+public class WebConfig implements WebMvcConfigurer {
     @Bean
     public SpringResourceTemplateResolver templateResolver() {
         SpringResourceTemplateResolver templateResolver = new SpringResourceTemplateResolver();
@@ -40,5 +43,14 @@ public class SpringConfig implements WebMvcConfigurer {
         registry.viewResolver(thymeleafViewresolver);
     }
 
+    @Autowired
+    private HibernateConfig hibernateConfig;
+
+    @Bean
+    public PlatformTransactionManager transactionManager() {
+        HibernateTransactionManager transactionManager = new HibernateTransactionManager();
+        transactionManager.setSessionFactory(hibernateConfig.sessionFactory().getObject());
+        return transactionManager;
+    }
 
 }
