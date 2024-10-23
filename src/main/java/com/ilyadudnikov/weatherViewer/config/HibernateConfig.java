@@ -1,5 +1,6 @@
 package com.ilyadudnikov.weatherViewer.config;
 
+import org.flywaydb.core.Flyway;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -22,6 +23,12 @@ public class HibernateConfig {
 
     @Value("${db.password}")
     private String dbPassword;
+
+    @Value("${hibernate.driver_class}")
+    private String driverClass;
+
+    @Value("${hibernate.jdbc.time_zone}")
+    private String timeZone;
 
     @Value("${hibernate.dialect}")
     private String hibernateDialect;
@@ -47,6 +54,7 @@ public class HibernateConfig {
         dataSource.setUrl(dbUrl);
         dataSource.setUsername(dbUsername);
         dataSource.setPassword(dbPassword);
+        dataSource.setDriverClassName(driverClass);
         return dataSource;
     }
 
@@ -55,6 +63,7 @@ public class HibernateConfig {
         hibernateProperties.setProperty("hibernate.dialect", hibernateDialect);
         hibernateProperties.setProperty("hibernate.show_sql", showSql);
         hibernateProperties.setProperty("hibernate.hbm2ddl.auto", hbm2ddlAuto);
+        hibernateProperties.setProperty("hibernate.jdbc.time_zone", timeZone);
         return hibernateProperties;
     }
 
@@ -63,5 +72,11 @@ public class HibernateConfig {
         return new PropertySourcesPlaceholderConfigurer();
     }
 
-
+    @Bean(initMethod = "migrate")
+    public Flyway flyway(DataSource dataSource) {
+        return Flyway.configure()
+                .dataSource(dataSource)
+                .locations("classpath:db/migration")
+                .load();
+    }
 }
