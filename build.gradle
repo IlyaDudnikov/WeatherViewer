@@ -27,6 +27,7 @@ dependencies {
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${junitVersion}")
 
     compileOnly 'org.projectlombok:lombok:1.18.30'
+    annotationProcessor 'org.projectlombok:lombok:1.18.30'
 
     implementation 'org.springframework:spring-core:6.1.14'
     implementation 'org.springframework:spring-context:6.1.14'
@@ -45,8 +46,16 @@ dependencies {
 
     implementation 'org.postgresql:postgresql:42.5.5'
 
+    implementation 'org.springframework.data:spring-data-jpa:3.3.4'
+
     implementation 'org.flywaydb:flyway-core:10.20.0'
     runtimeOnly 'org.flywaydb:flyway-database-postgresql:10.20.0'
+
+    implementation 'org.hibernate.validator:hibernate-validator:7.0.4.Final'
+
+    implementation 'at.favre.lib:bcrypt:0.10.2'
+
+
 
 
 
