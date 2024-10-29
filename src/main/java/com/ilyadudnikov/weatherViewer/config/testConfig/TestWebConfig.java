@@ -1,7 +1,7 @@
-package com.ilyadudnikov.weatherViewer.config;
+package com.ilyadudnikov.weatherViewer.config.testConfig;
 
-import com.ilyadudnikov.weatherViewer.config.testConfig.TestHibernateConfig;
-import com.ilyadudnikov.weatherViewer.config.testConfig.TestWebConfig;
+import com.ilyadudnikov.weatherViewer.config.HibernateConfig;
+import com.ilyadudnikov.weatherViewer.config.WebConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -25,10 +25,10 @@ import org.thymeleaf.spring6.view.ThymeleafViewResolver;
         basePackages = "com.ilyadudnikov.weatherViewer",
         excludeFilters = @ComponentScan.Filter(
                 type = FilterType.ASSIGNABLE_TYPE,
-                classes = {TestWebConfig.class, TestHibernateConfig.class} // Исключаем ненужные конфигурации
+                classes = {WebConfig.class, HibernateConfig.class}
         )
 )
-public class WebConfig implements WebMvcConfigurer {
+public class TestWebConfig implements WebMvcConfigurer {
     @Bean
     public SpringResourceTemplateResolver templateResolver() {
         SpringResourceTemplateResolver templateResolver = new SpringResourceTemplateResolver();
@@ -62,5 +62,4 @@ public class WebConfig implements WebMvcConfigurer {
         transactionManager.setSessionFactory(sessionFactory.getObject());
         return transactionManager;
     }
-
 }

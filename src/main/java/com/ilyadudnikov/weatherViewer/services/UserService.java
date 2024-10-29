@@ -43,4 +43,9 @@ public class UserService {
         user.setPassword(encodedPassword);
         userDao.save(user);
     }
+
+    @Transactional
+    public void deleteAll() {
+        userDao.deleteAll();
+    }
 }

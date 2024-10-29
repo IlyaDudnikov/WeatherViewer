@@ -39,6 +39,6 @@ public class User {
     )
     private List<Location> locations = new ArrayList<>();
 
-    @OneToOne(mappedBy = "user", fetch = FetchType.EAGER)
+    @OneToOne(mappedBy = "user", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.EAGER)
     private Session session = new Session();
 }

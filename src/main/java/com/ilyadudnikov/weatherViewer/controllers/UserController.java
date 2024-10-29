@@ -37,7 +37,7 @@ public class UserController {
         if (redirectUrl != null && !redirectUrl.isEmpty()) {
             model.addAttribute("redirectUrl", redirectUrl);
         }
-        return "login";
+        return "loginView";
     }
 
     @PostMapping("/login")
@@ -45,13 +45,13 @@ public class UserController {
                             @RequestParam(value = "redirect", required = false) String redirectUrl,
                             HttpServletResponse response) {
         if (bindingResult.hasErrors()) {
-            return "login";
+            return "loginView";
         }
 
         User foundUser = userService.findUserByLoginAndPassword(user.getLogin(), user.getPassword());
         if (foundUser == null) {
             bindingResult.reject("loginError", "Invalid login or password");
-            return "login";
+            return "loginView";
         }
 
         UUID sessionUuid = sessionService.create(foundUser);
@@ -74,26 +74,26 @@ public class UserController {
         }
 
         model.addAttribute("user", new User());
-        return "register";
+        return "registerView";
     }
 
     @PostMapping("/register")
     public String registerPost(@ModelAttribute @Valid User user, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return "register";
+            return "registerView";
         }
 
         User foundUser = userService.findUserByLoginAndPassword(user.getLogin(), user.getPassword());
         if (foundUser != null) {
-            bindingResult.reject("loginError", "User with this login already exists");
-            return "register";
+            bindingResult.reject("registerError", "User with this login already exists");
+            return "registerView";
         }
 
         try {
             userService.register(user);
         } catch(UserAlreadyExistException e) {
-            bindingResult.reject("loginError", "User with this login already exists");
-            return "register";
+            bindingResult.reject("registerError", "User with this login already exists");
+            return "registerView";
         }
 
         return "redirect:/login";

@@ -7,6 +7,7 @@ import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -20,12 +21,10 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public Optional<User> findByLogin(String login) {
-        User user;
-        try (Session session = sessionFactory.openSession()) {
-            user = session.createQuery("FROM User WHERE login = :login", User.class)
-                    .setParameter("login", login)
-                    .uniqueResult();
-        }
+        Session session = sessionFactory.getCurrentSession();
+        User user = session.createQuery("FROM User WHERE login = :login", User.class)
+                .setParameter("login", login)
+                .uniqueResult();
         return Optional.ofNullable(user);
     }
 
@@ -33,8 +32,14 @@ public class UserDaoImpl implements UserDao {
     public void save(User user) {
         Session session = sessionFactory.getCurrentSession();
         session.persist(user);
-//        try (Session session = sessionFactory.openSession()) {
-//            session.persist(user);
-//        }
+    }
+
+    @Override
+    public void deleteAll() {
+        Session session = sessionFactory.getCurrentSession();
+        List<User> users = session.createQuery("FROM User", User.class).getResultList();
+        for (User user : users) {
+            session.remove(user);
+        }
     }
 }
