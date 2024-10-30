@@ -6,13 +6,7 @@ import lombok.Getter;
 
 @Getter
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Weather {
+public class Main {
     @JsonProperty("feels_like")
     private Double feelsLike;
-
-    @JsonProperty("description")
-    private String description;
-
-    @JsonProperty("icon")
-    private String icon;
 }
