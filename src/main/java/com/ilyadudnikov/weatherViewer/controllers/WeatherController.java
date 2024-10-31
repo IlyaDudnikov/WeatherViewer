@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -54,7 +55,7 @@ public class WeatherController {
         return "indexView";
     }
 
-    @GetMapping
+    @GetMapping("/search")
     public String search(@CookieValue(value="session_id", required = false) String sessionId,
                          @RequestParam(value = "q", required = false) String locationName,
                          HttpServletResponse response, Model model) throws GeocodingApiException {
@@ -68,7 +69,10 @@ public class WeatherController {
         UserDto user = userService.getUserBySession(session);
         model.addAttribute("user", user);
 
-        List<LocationApiResponse> foundLocations = locationService.getLocationsByName(locationName);
+        List<LocationApiResponse> foundLocations = new ArrayList<>();
+        if (locationName != null) {
+            foundLocations = locationService.getLocationsByName(locationName);
+        }
         model.addAttribute("locations", foundLocations);
 
         return "searchView";
