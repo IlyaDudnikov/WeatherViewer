@@ -3,6 +3,7 @@ package com.ilyadudnikov.weatherViewer.services;
 import com.ilyadudnikov.weatherViewer.models.Location;
 import com.ilyadudnikov.weatherViewer.models.api.LocationApiResponse;
 import com.ilyadudnikov.weatherViewer.models.api.LocationWithWeatherApiResponse;
+import com.ilyadudnikov.weatherViewer.services.location.OpenWeatherApiService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;

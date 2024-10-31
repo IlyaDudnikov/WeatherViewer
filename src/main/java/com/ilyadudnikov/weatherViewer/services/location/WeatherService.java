@@ -1,4 +1,4 @@
-package com.ilyadudnikov.weatherViewer.services;
+package com.ilyadudnikov.weatherViewer.services.location;
 
 import com.ilyadudnikov.weatherViewer.exceptions.GeocodingApiException;
 import com.ilyadudnikov.weatherViewer.exceptions.WeatherApiException;

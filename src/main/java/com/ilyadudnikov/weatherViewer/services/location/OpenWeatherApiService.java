@@ -1,4 +1,4 @@
-package com.ilyadudnikov.weatherViewer.services;
+package com.ilyadudnikov.weatherViewer.services.location;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -9,7 +9,6 @@ import com.ilyadudnikov.weatherViewer.models.api.LocationApiResponse;
 import com.ilyadudnikov.weatherViewer.models.api.LocationWithWeatherApiResponse;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.net.URI;
 import java.net.URLEncoder;
@@ -42,7 +41,7 @@ public class OpenWeatherApiService implements WeatherService {
                 throw new GeocodingApiException("Failed to get locations: " + response.body());
             }
 
-            return objectMapper.readValue(response.body(), new TypeReference<List<LocationApiResponse>>() {});
+            return objectMapper.readValue(response.body(), new TypeReference<>() {});
 
         } catch (Exception e) {
             throw new GeocodingApiException(e.getMessage());
