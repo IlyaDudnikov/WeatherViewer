@@ -98,4 +98,16 @@ public class UserController {
 
         return "redirect:/login";
     }
+
+    @PostMapping
+    public String logout(@CookieValue(value = "session_id") String sessionId,
+                         HttpServletResponse response) {
+        sessionService.deleteById(sessionId);
+
+        Cookie cookie = new Cookie("session_id", "");
+        cookie.setMaxAge(0);
+        response.addCookie(cookie);
+
+        return "redirect:/login";
+    }
 }

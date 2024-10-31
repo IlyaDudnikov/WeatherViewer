@@ -36,4 +36,11 @@ public class SessionDaoImpl implements SessionDao {
         org.hibernate.Session hibernateSession = sessionFactory.getCurrentSession();
         hibernateSession.remove(session);
     }
+
+    @Override
+    public void deleteById(UUID uuid) {
+        org.hibernate.Session hibernateSession = sessionFactory.getCurrentSession();
+        Session session = hibernateSession.get(Session.class, uuid);
+        hibernateSession.remove(session);
+    }
 }

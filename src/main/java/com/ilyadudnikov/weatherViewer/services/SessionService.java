@@ -38,13 +38,19 @@ public class SessionService {
         if (session.isPresent()) {
             return session.get();
         } else {
-            throw new SessionNotFoundException("Session with this uuid was not found: " + sessionUuid.toString());
+            throw new SessionNotFoundException("Session with this uuid was not found: " + sessionUuid);
         }
     }
 
     @Transactional
     public void delete(Session session) {
         sessionDao.delete(session);
+    }
+
+    @Transactional
+    public void deleteById(String sessionIdString) {
+        UUID sessionId = UUID.fromString(sessionIdString);
+        sessionDao.deleteById(sessionId);
     }
 
     public boolean isSessionExpired(Session session) {

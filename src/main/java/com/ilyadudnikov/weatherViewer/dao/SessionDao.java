@@ -9,4 +9,5 @@ public interface SessionDao {
     void save(Session session);
     Optional<Session> findById(UUID uuid);
     void delete(Session session);
+    void deleteById(UUID uuid);
 }
