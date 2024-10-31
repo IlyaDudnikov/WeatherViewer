@@ -18,6 +18,6 @@ public class LocationApiResponse {
     @JsonProperty("lon")
     private BigDecimal longitude;
 
-    @JsonProperty("state")
-    private String state;
+    @JsonProperty("country")
+    private String country;
 }

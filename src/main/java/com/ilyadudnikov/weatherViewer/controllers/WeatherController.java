@@ -16,9 +16,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.CookieValue;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -76,6 +74,21 @@ public class WeatherController {
         model.addAttribute("locations", foundLocations);
 
         return "searchView";
+    }
+
+    @PostMapping("/location")
+    public String addLocation(@ModelAttribute LocationApiResponse location,
+                              @CookieValue(value = "session_id") String sessionId,
+                              HttpServletResponse response) {
+        Session session;
+        try {
+            session = getValidSession(sessionId, response);
+        } catch(NoValidSessionException e) {
+            return "redirect:/login";
+        }
+
+        userService.addLocationBySession(location, session);
+        return "redirect:/";
     }
 
     private Session getValidSession(String sessionId, HttpServletResponse response) throws NoValidSessionException {

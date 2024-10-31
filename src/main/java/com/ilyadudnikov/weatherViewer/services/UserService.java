@@ -3,9 +3,11 @@ package com.ilyadudnikov.weatherViewer.services;
 import at.favre.lib.crypto.bcrypt.BCrypt;
 import com.ilyadudnikov.weatherViewer.dto.UserDto;
 import com.ilyadudnikov.weatherViewer.exceptions.UserAlreadyExistException;
+import com.ilyadudnikov.weatherViewer.models.Location;
 import com.ilyadudnikov.weatherViewer.models.Session;
 import com.ilyadudnikov.weatherViewer.models.User;
 import com.ilyadudnikov.weatherViewer.dao.UserDao;
+import com.ilyadudnikov.weatherViewer.models.api.LocationApiResponse;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -44,6 +46,15 @@ public class UserService {
 
         String encodedPassword = BCrypt.withDefaults().hashToString(12, user.getPassword().toCharArray());
         user.setPassword(encodedPassword);
+        userDao.save(user);
+    }
+
+    @Transactional
+    public void addLocationBySession(LocationApiResponse locationApiResponse, Session session) {
+        ModelMapper modelMapper = new ModelMapper();
+        Location location = modelMapper.map(locationApiResponse, Location.class);
+        User user = session.getUser();
+        user.getLocations().add(location);
         userDao.save(user);
     }
 
