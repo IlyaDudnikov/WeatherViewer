@@ -30,6 +30,12 @@ public class LocationService {
 
         for (Location location : userLocations) {
             LocationWithWeatherApiResponse locationWeatherApi = weatherService.getLocationWithWeather(location);
+
+            locationWeatherApi.getCoord().setLatitude(location.getLatitude());
+            locationWeatherApi.getCoord().setLongitude(location.getLongitude());
+
+            locationWeatherApi.setId(location.getId());
+
             locationsWeatherApi.add(locationWeatherApi);
         }
 

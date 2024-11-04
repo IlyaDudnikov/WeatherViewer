@@ -99,7 +99,7 @@ public class UserController {
         return "redirect:/login";
     }
 
-    @PostMapping
+    @PostMapping("/logout")
     public String logout(@CookieValue(value = "session_id") String sessionId,
                          HttpServletResponse response) {
         sessionService.deleteById(sessionId);

@@ -9,4 +9,10 @@ import lombok.Getter;
 public class Main {
     @JsonProperty("feels_like")
     private Double feelsLike;
+
+    @JsonProperty("temp")
+    private Double temperature;
+
+    @JsonProperty("humidity")
+    private Integer humidity;
 }

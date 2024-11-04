@@ -18,6 +18,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -68,7 +69,7 @@ public class WeatherController {
         model.addAttribute("user", user);
 
         List<LocationApiResponse> foundLocations = new ArrayList<>();
-        if (locationName != null) {
+        if (locationName != null && !locationName.isBlank()) {
             foundLocations = locationService.getLocationsByName(locationName);
         }
         model.addAttribute("locations", foundLocations);
@@ -77,7 +78,9 @@ public class WeatherController {
     }
 
     @PostMapping("/location")
-    public String addLocation(@ModelAttribute LocationApiResponse location,
+    public String addLocation(@RequestParam(value="name") String name,
+                              @RequestParam(value="latitude") BigDecimal latitude,
+                              @RequestParam(value="longitude") BigDecimal longitude,
                               @CookieValue(value = "session_id") String sessionId,
                               HttpServletResponse response) {
         Session session;
@@ -86,6 +89,12 @@ public class WeatherController {
         } catch(NoValidSessionException e) {
             return "redirect:/login";
         }
+
+        LocationApiResponse location = LocationApiResponse.builder()
+                .name(name)
+                .latitude(latitude)
+                .longitude(longitude)
+                .build();
 
         userService.addLocationBySession(location, session);
         return "redirect:/";

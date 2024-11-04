@@ -3,30 +3,44 @@
 <head>
   <meta charset="UTF-8">
   <title>Register</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 </head>
 <body>
+<div class="bg-light d-flex justify-content-center align-items-center vh-100">
+  <div class="card shadow p-4" style="width: 100%; max-width: 400px;">
+    <h3 class="text-center mb-4">Register</h3>
+    <form th:method="POST" th:action="@{/register}" th:object="${user}">
+      <div th:if="${#fields.hasGlobalErrors()}" class="alert alert-danger text-center">
+        <p th:each="err : ${#fields.globalErrors()}}" th:text="${err}"></p>
+      </div>
 
-<form th:method="POST" th:action="@{/register}" th:object="${user}">
-  <div th:if="${#fields.hasGlobalErrors()}" class="error">
-    <p th:each="err : ${#fields.globalErrors()}}" th:text="${err}"></p>
+      <div class="mb-3">
+        <label for="login" class="form-label">Login</label>
+        <input type="text" th:field="*{login}" id="login" placeholder="Enter login" class="form-control">
+        <div th:if="${#fields.hasErrors('login')}" class="text-danger mt-1">
+          <p th:errors="*{login}">Invalid login</p>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label for="password" class="form-label">Password</label>
+        <input type="password" th:field="*{password}" id="password" placeholder="Enter password" class="form-control">
+        <div th:if="${#fields.hasErrors('password')}" class="text-danger mt-1">
+          <p th:errors="*{password}">Invalid password</p>
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn-primary w-100">Sign up</button>
+    </form>
+
+    <div class="text-center mt-3">
+      <span>Already have an account?</span>
+      <a th:href="@{/login}" class="text-decoration-none">Sign in</a>
+    </div>
   </div>
+</div>
 
-  <label for="login"></label>
-  <input type="text" th:field="*{login}" id="login">
-  <div th:if="${#fields.hasErrors('login')}" class="error">
-    <p th:errors="*{login}">Invalid login</p>
-  </div>
-
-  <label for="password"></label>
-  <input type="password" th:field="*{password}" id="password">
-  <div th:if="${#fields.hasErrors('password')}" class="error">
-    <p th:errors="*{password}">Invalid password</p>
-  </div>
-
-  <button type="submit">Create account</button>
-</form>
-
-<a th:href="@{login}">Sign in</a>
 
 </body>
 </html>

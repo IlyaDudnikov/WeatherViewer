@@ -2,6 +2,7 @@ package com.ilyadudnikov.weatherViewer.services.location;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ilyadudnikov.weatherViewer.config.Utils;
 import com.ilyadudnikov.weatherViewer.exceptions.GeocodingApiException;
 import com.ilyadudnikov.weatherViewer.exceptions.WeatherApiException;
 import com.ilyadudnikov.weatherViewer.models.Location;
@@ -78,6 +79,7 @@ public class OpenWeatherApiService implements WeatherService {
         return URI.create(BASE_API_URL + GEOCODING_API_URL_SUFFIX +
                 "?q=" + URLEncoder.encode(locationName, StandardCharsets.UTF_8) +
                 "&appid=" + APPID +
+                "&limit=" + Utils.LOCATION_LIMIT +
                 "&units=metric"
         );
     }

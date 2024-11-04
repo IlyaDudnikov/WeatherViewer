@@ -1,6 +1,7 @@
 package com.ilyadudnikov.weatherViewer.services;
 
 import at.favre.lib.crypto.bcrypt.BCrypt;
+import com.ilyadudnikov.weatherViewer.dao.LocationDao;
 import com.ilyadudnikov.weatherViewer.dto.UserDto;
 import com.ilyadudnikov.weatherViewer.exceptions.UserAlreadyExistException;
 import com.ilyadudnikov.weatherViewer.models.Location;
@@ -18,10 +19,12 @@ import java.util.Optional;
 @Service
 public class UserService {
     private final UserDao userDao;
+    private final LocationDao locationDao;
 
     @Autowired
-    public UserService(UserDao userDao) {
+    public UserService(UserDao userDao, LocationDao locationDao) {
         this.userDao = userDao;
+        this.locationDao = locationDao;
     }
 
     @Transactional
@@ -52,10 +55,17 @@ public class UserService {
     @Transactional
     public void addLocationBySession(LocationApiResponse locationApiResponse, Session session) {
         ModelMapper modelMapper = new ModelMapper();
-        Location location = modelMapper.map(locationApiResponse, Location.class);
+        Optional<Location> locationOptional = locationDao.findByCoordinates(locationApiResponse.getLatitude(), locationApiResponse.getLongitude());
+        Location location;
+        if (locationOptional.isPresent()) {
+            location = locationOptional.get();
+        } else {
+            location = modelMapper.map(locationApiResponse, Location.class);
+            locationDao.save(location);
+        }
         User user = session.getUser();
         user.getLocations().add(location);
-        userDao.save(user);
+        userDao.update(user);
     }
 
     public UserDto getUserBySession(Session session) {

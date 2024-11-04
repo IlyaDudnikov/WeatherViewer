@@ -35,6 +35,12 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
+    public void update(User user) {
+        Session session = sessionFactory.getCurrentSession();
+        session.merge(user);
+    }
+
+    @Override
     public void deleteAll() {
         Session session = sessionFactory.getCurrentSession();
         List<User> users = session.createQuery("FROM User", User.class).getResultList();
