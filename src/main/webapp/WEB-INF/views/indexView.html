@@ -34,9 +34,9 @@
 
     <div class="row">
         <div th:each="location : ${locations}" class="col-12 col-md-4 col-lg-3 mb-4">
-            <div class="card position-relative">
+            <div class="card position-relative h-100">
                 <img th:src="'https://openweathermap.org/img/wn/' + ${location.getIcon()} + '@4x.png'" alt="weather icon" class="card-img-top" style="max-height: 150px; object-fit: contain;">
-                <form th:action="@{/location}" th:method="post" class="position-absolute top-0 end-0 m-2">
+                <form th:action="@{/location-delete}" th:method="post" class="position-absolute top-0 end-0 m-2">
                     <input type="hidden" name="locationId" th:value="${location.getId()}">
                     <button type="submit" class="btn-close" aria-label="Remove location"></button>
                 </form>
@@ -45,6 +45,9 @@
                     <h2 th:text="${location.getName()} + ', ' + ${location.getCountry()}"></h2>
                     <p class="mb-1" th:text="'Feels like ' + ${location.getFeelsLike()} + '&deg;C' + '. ' + ${#strings.capitalize(location.getDescription())}"></p>
                     <p class="mb-1" th:text="'Humidity ' + ${location.getHumidity()} + ' %'"></p>
+                    <p class="mb-1" th:text="'Latitude ' + ${location.getLatitude()}"></p>
+                    <p class="mb-1" th:text="'Longitude ' + ${location.getLongitude()}"></p>
+                    <p class="mb-1" th:text="'Country ' + ${location.getCountry()}"></p>
                 </div>
             </div>
         </div>

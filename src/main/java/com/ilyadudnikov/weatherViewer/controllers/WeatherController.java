@@ -2,10 +2,7 @@ package com.ilyadudnikov.weatherViewer.controllers;
 
 import com.ilyadudnikov.weatherViewer.dto.LocationWithWeatherDto;
 import com.ilyadudnikov.weatherViewer.dto.UserDto;
-import com.ilyadudnikov.weatherViewer.exceptions.GeocodingApiException;
-import com.ilyadudnikov.weatherViewer.exceptions.NoValidSessionException;
-import com.ilyadudnikov.weatherViewer.exceptions.SessionNotFoundException;
-import com.ilyadudnikov.weatherViewer.exceptions.WeatherApiException;
+import com.ilyadudnikov.weatherViewer.exceptions.*;
 import com.ilyadudnikov.weatherViewer.models.Session;
 import com.ilyadudnikov.weatherViewer.models.api.LocationApiResponse;
 import com.ilyadudnikov.weatherViewer.services.SessionService;
@@ -96,7 +93,21 @@ public class WeatherController {
                 .longitude(longitude)
                 .build();
 
-        userService.addLocationBySession(location, session);
+        locationService.add(location, session);
+        return "redirect:/";
+    }
+
+    @PostMapping("/location-delete")
+    public String deleteLocation(@RequestParam(value = "locationId") Long locationId,
+                                 @CookieValue(value = "session_id") String sessionId,
+                                 HttpServletResponse response) {
+        try {
+            Session session = getValidSession(sessionId, response);
+        } catch(NoValidSessionException e) {
+            return "redirect:/login";
+        }
+
+        locationService.delete(locationId);
         return "redirect:/";
     }
 

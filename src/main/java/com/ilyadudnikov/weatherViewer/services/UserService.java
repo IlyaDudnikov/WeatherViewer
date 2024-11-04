@@ -1,14 +1,11 @@
 package com.ilyadudnikov.weatherViewer.services;
 
 import at.favre.lib.crypto.bcrypt.BCrypt;
-import com.ilyadudnikov.weatherViewer.dao.LocationDao;
 import com.ilyadudnikov.weatherViewer.dto.UserDto;
 import com.ilyadudnikov.weatherViewer.exceptions.UserAlreadyExistException;
-import com.ilyadudnikov.weatherViewer.models.Location;
 import com.ilyadudnikov.weatherViewer.models.Session;
 import com.ilyadudnikov.weatherViewer.models.User;
 import com.ilyadudnikov.weatherViewer.dao.UserDao;
-import com.ilyadudnikov.weatherViewer.models.api.LocationApiResponse;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,12 +16,10 @@ import java.util.Optional;
 @Service
 public class UserService {
     private final UserDao userDao;
-    private final LocationDao locationDao;
 
     @Autowired
-    public UserService(UserDao userDao, LocationDao locationDao) {
+    public UserService(UserDao userDao) {
         this.userDao = userDao;
-        this.locationDao = locationDao;
     }
 
     @Transactional
@@ -50,22 +45,6 @@ public class UserService {
         String encodedPassword = BCrypt.withDefaults().hashToString(12, user.getPassword().toCharArray());
         user.setPassword(encodedPassword);
         userDao.save(user);
-    }
-
-    @Transactional
-    public void addLocationBySession(LocationApiResponse locationApiResponse, Session session) {
-        ModelMapper modelMapper = new ModelMapper();
-        Optional<Location> locationOptional = locationDao.findByCoordinates(locationApiResponse.getLatitude(), locationApiResponse.getLongitude());
-        Location location;
-        if (locationOptional.isPresent()) {
-            location = locationOptional.get();
-        } else {
-            location = modelMapper.map(locationApiResponse, Location.class);
-            locationDao.save(location);
-        }
-        User user = session.getUser();
-        user.getLocations().add(location);
-        userDao.update(user);
     }
 
     public UserDto getUserBySession(Session session) {

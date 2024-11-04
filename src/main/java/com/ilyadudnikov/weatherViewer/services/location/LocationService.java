@@ -1,5 +1,6 @@
 package com.ilyadudnikov.weatherViewer.services.location;
 
+import com.ilyadudnikov.weatherViewer.dao.LocationDao;
 import com.ilyadudnikov.weatherViewer.dto.LocationWithWeatherDto;
 import com.ilyadudnikov.weatherViewer.exceptions.GeocodingApiException;
 import com.ilyadudnikov.weatherViewer.exceptions.WeatherApiException;
@@ -8,8 +9,10 @@ import com.ilyadudnikov.weatherViewer.models.Session;
 import com.ilyadudnikov.weatherViewer.models.User;
 import com.ilyadudnikov.weatherViewer.models.api.LocationApiResponse;
 import com.ilyadudnikov.weatherViewer.models.api.LocationWithWeatherApiResponse;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,10 +20,12 @@ import java.util.List;
 @Service
 public class LocationService {
     private final WeatherService weatherService;
+    private final LocationDao locationDao;
 
     @Autowired
-    public LocationService(WeatherService weatherService) {
+    public LocationService(WeatherService weatherService, LocationDao locationDao) {
         this.weatherService = weatherService;
+        this.locationDao = locationDao;
     }
 
     public List<LocationWithWeatherDto> getUserLocationsWithWeatherBySession(Session session) throws WeatherApiException {
@@ -45,5 +50,19 @@ public class LocationService {
 
     public List<LocationApiResponse> getLocationsByName(String locationName) throws GeocodingApiException {
         return weatherService.getLocationsByName(locationName);
+    }
+
+    @Transactional
+    public void add(LocationApiResponse locationApiResponse, Session session) {
+        ModelMapper modelMapper = new ModelMapper();
+        Location location = modelMapper.map(locationApiResponse, Location.class);
+        User user = session.getUser();
+        location.setUser(user);
+        locationDao.save(location);
+    }
+
+    @Transactional
+    public void delete(Long locationId) {
+        locationDao.deleteById(locationId);
     }
 }

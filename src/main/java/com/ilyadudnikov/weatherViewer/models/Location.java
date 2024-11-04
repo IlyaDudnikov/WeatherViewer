@@ -7,8 +7,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Table(name = "locations")
@@ -24,8 +22,9 @@ public class Location {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @ManyToMany(mappedBy = "locations")
-    private List<User> users = new ArrayList<>();
+    @ManyToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
+    private User user;
 
     @Column(name = "latitude", nullable = false)
     private BigDecimal latitude;
