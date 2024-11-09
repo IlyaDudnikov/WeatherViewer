@@ -9,6 +9,6 @@ A web application for viewing the current weather. The user can register and add
 The author of the terms of reference is https://github.com/zhukovsd
 
 ## Project Motivation
-Using cookies and sessions for user authorisation
-Getting to know Spring
-Working with external APIs
+- Using cookies and sessions for user authorisation  
+- Getting to know Spring  
+- Working with external APIs  
